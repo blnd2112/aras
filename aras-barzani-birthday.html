@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aras Barzani · 19 · ساڵڕۆژی پیرۆز</title>
+
+<!-- Fonts: Bungee (loud Latin display), Rakkas (decorative Kurdish/Arabic display), Cairo (bi-script body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Cairo:wght@400;700;900&family=Rakkas&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --red:    #ED2024;   /* Kurdish flag red   */
+    --green:  #279847;   /* Kurdish flag green */
+    --gold:   #FEBD11;   /* Roj sun gold       */
+    --white:  #FFFFFF;
+    --ink:    #07090a;   /* near-black ground  */
+    --ink-2:  #0e1311;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family:'Cairo', sans-serif;
+    background:
+      radial-gradient(120% 90% at 50% 0%, #13201a 0%, var(--ink) 55%, #000 100%);
+    color:var(--white);
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+  }
+
+  /* ============ FLOWING FLAG-COLOR WAVE BACKGROUND ============ */
+  .wave-bg{
+    position:fixed; inset:-25%;
+    z-index:0; pointer-events:none;
+    background:linear-gradient(120deg,var(--red),var(--gold),var(--green),var(--red));
+    background-size:400% 400%;
+    filter:blur(70px) saturate(1.25);
+    opacity:.38;
+    animation:flow 14s ease-in-out infinite;
+  }
+  @keyframes flow{
+    0%{ background-position:0% 50%; }
+    50%{ background-position:100% 50%; }
+    100%{ background-position:0% 50%; }
+  }
+  /* subtle vignette to keep text crisp */
+  .vignette{
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(120% 120% at 50% 35%, transparent 40%, rgba(0,0,0,.65) 100%);
+  }
+
+  /* confetti canvas (created by canvas-confetti) sits above bg, below nothing important */
+  canvas{ position:fixed!important; inset:0; z-index:5; pointer-events:none; }
+
+  main{ position:relative; z-index:10; }
+
+  /* ============================ HERO ============================ */
+  .hero{
+    min-height:100svh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center;
+    padding:clamp(20px,5vw,60px) 18px 40px;
+    gap:clamp(14px,2.5vw,26px);
+  }
+
+  /* ---- The Roj: 21-ray glowing spinning Kurdish sun ---- */
+  .sun-stage{
+    width:clamp(230px,58vmin,470px);
+    height:clamp(230px,58vmin,470px);
+    position:relative;
+    display:grid; place-items:center;
+    margin-bottom:clamp(6px,2vw,18px);
+    filter:drop-shadow(0 0 26px rgba(254,189,17,.55)) drop-shadow(0 0 60px rgba(237,32,36,.30));
+  }
+  .sun-stage svg{ width:100%; height:100%; overflow:visible; }
+  .rays{
+    transform-origin:200px 200px;
+    animation:spin 26s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .halo{
+    position:absolute; inset:-6%;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(254,189,17,.28) 0%, transparent 62%);
+    animation:pulse 3.4s ease-in-out infinite;
+    z-index:-1;
+  }
+  @keyframes pulse{ 0%,100%{ transform:scale(.96); opacity:.85; } 50%{ transform:scale(1.08); opacity:1; } }
+
+  /* ---- Hero text ---- */
+  .eyebrow{
+    font-family:'Rakkas', 'Cairo', serif;
+    font-size:clamp(1.4rem,5vw,2.6rem);
+    color:var(--gold);
+    direction:rtl;
+    line-height:1.3;
+    text-shadow:0 0 18px rgba(254,189,17,.55);
+    opacity:0;                      /* gsap reveals */
+  }
+
+  .name{
+    font-family:'Bungee', sans-serif;
+    font-size:clamp(2.6rem,12vw,7.5rem);
+    line-height:.95;
+    letter-spacing:.02em;
+    color:var(--white);
+    display:flex; flex-wrap:wrap; justify-content:center;
+    gap:0 .02em;
+  }
+  .name .ch{
+    display:inline-block;
+    will-change:transform,opacity;
+    color:var(--white);
+    text-shadow:
+      0 0 6px var(--white),
+      0 0 22px var(--red),
+      0 0 44px var(--red),
+      0 0 70px rgba(237,32,36,.6);
+    animation:neon 2.6s ease-in-out infinite;
+  }
+  .name .ch:nth-child(3n)  { text-shadow:0 0 6px #fff, 0 0 22px var(--green), 0 0 44px var(--green), 0 0 70px rgba(39,152,71,.6); }
+  .name .ch:nth-child(3n+1){ text-shadow:0 0 6px #fff, 0 0 22px var(--gold),  0 0 44px var(--gold),  0 0 70px rgba(254,189,17,.6); }
+  .name .word{ display:inline-flex; }
+  .name .space{ width:.45em; }
+  @keyframes neon{ 0%,100%{ filter:brightness(1); } 50%{ filter:brightness(1.35); } }
+
+  /* ---- Big 19 ---- */
+  .age-row{
+    display:flex; align-items:center; justify-content:center;
+    gap:clamp(12px,3vw,30px);
+    opacity:0;                      /* gsap reveals */
+  }
+  .age{
+    font-family:'Bungee', sans-serif;
+    font-size:clamp(4rem,20vw,12rem);
+    line-height:.8;
+    background:linear-gradient(180deg,var(--gold) 0%,#ff9d00 55%,var(--red) 100%);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 6px 0 rgba(0,0,0,.35)) drop-shadow(0 0 30px rgba(254,189,17,.6));
+  }
+  .age-kurdish{
+    font-family:'Rakkas', serif;
+    font-size:clamp(1.6rem,6vw,3.4rem);
+    color:var(--green);
+    direction:rtl;
+    text-shadow:0 0 18px rgba(39,152,71,.7);
+  }
+
+  /* ---- Glitch subtitle ---- */
+  .glitch{
+    position:relative;
+    font-family:'Bungee', sans-serif;
+    font-size:clamp(.95rem,3.6vw,1.9rem);
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--white);
+    opacity:0;                      /* gsap reveals */
+  }
+  .glitch::before,.glitch::after{
+    content:attr(data-text);
+    position:absolute; inset:0;
+    overflow:hidden;
+  }
+  .glitch::before{ left:2px; text-shadow:-2px 0 var(--red);   clip-path:inset(0 0 55% 0); animation:glitch 2.4s infinite linear alternate-reverse; }
+  .glitch::after { left:-2px; text-shadow:-2px 0 var(--green); clip-path:inset(55% 0 0 0); animation:glitch 1.7s infinite linear alternate-reverse; }
+  @keyframes glitch{
+    0%{ transform:translateX(0); }   20%{ transform:translateX(-3px); }
+    40%{ transform:translateX(3px); } 60%{ transform:translateX(-2px); }
+    80%{ transform:translateX(2px); } 100%{ transform:translateX(0); }
+  }
+
+  /* ---- Wish button ---- */
+  .wish{
+    margin-top:clamp(8px,2vw,18px);
+    font-family:'Bungee', sans-serif;
+    font-size:clamp(1rem,3.4vw,1.5rem);
+    color:var(--ink);
+    background:linear-gradient(135deg,var(--gold),#ffd84d);
+    border:none; border-radius:999px;
+    padding:.7em 1.7em;
+    cursor:pointer;
+    box-shadow:0 0 0 4px rgba(255,255,255,.12), 0 12px 30px rgba(254,189,17,.45);
+    transition:transform .15s ease, box-shadow .2s ease;
+    opacity:0;                      /* gsap reveals */
+  }
+  .wish:hover{ transform:translateY(-3px) scale(1.06); box-shadow:0 0 0 5px rgba(255,255,255,.2), 0 18px 44px rgba(254,189,17,.65); }
+  .wish:active{ transform:scale(.97); }
+
+  .scroll-hint{
+    margin-top:6px; font-size:.8rem; letter-spacing:.25em; text-transform:uppercase;
+    color:rgba(255,255,255,.55); opacity:0; animation:bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(6px); } }
+
+  /* ===================== KILIM DIVIDER ===================== */
+  /* geometric carpet band evoking a Kurdish kilim diamond border */
+  .kilim{
+    height:46px;
+    background-color:var(--ink-2);
+    background-image:
+      linear-gradient(135deg, var(--red) 25%, transparent 25%),
+      linear-gradient(225deg, var(--red) 25%, transparent 25%),
+      linear-gradient(45deg,  var(--green) 25%, transparent 25%),
+      linear-gradient(315deg, var(--green) 25%, transparent 25%);
+    background-position:23px 0, 23px 0, 0 0, 0 0;
+    background-size:46px 46px;
+    background-repeat:repeat;
+    border-top:4px solid var(--gold);
+    border-bottom:4px solid var(--gold);
+    position:relative;
+    box-shadow:0 0 24px rgba(254,189,17,.25);
+  }
+  .kilim::after{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(90deg, transparent 0 20px, rgba(254,189,17,.7) 20px 22px);
+    mix-blend-mode:screen; opacity:.5;
+  }
+
+  /* ===================== MESSAGE SECTION ===================== */
+  .section{
+    padding:clamp(48px,8vw,96px) 20px;
+    max-width:1080px; margin:0 auto;
+    text-align:center;
+  }
+  .section-kurdish{
+    font-family:'Rakkas', serif;
+    direction:rtl;
+    font-size:clamp(1.9rem,6vw,3.6rem);
+    color:var(--gold);
+    text-shadow:0 0 20px rgba(254,189,17,.5);
+    line-height:1.5;
+    margin-bottom:.4em;
+  }
+  .section-en{
+    font-family:'Cairo', sans-serif; font-weight:700;
+    font-size:clamp(1rem,3vw,1.4rem);
+    color:rgba(255,255,255,.82);
+    max-width:640px; margin:0 auto clamp(34px,5vw,52px);
+    line-height:1.7;
+  }
+  .accent{ color:var(--red); } .accent-g{ color:var(--green); } .accent-y{ color:var(--gold); }
+
+  /* interactive spark cards */
+  .cards{
+    display:grid; gap:clamp(16px,3vw,26px);
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  }
+  .card{
+    background:linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    border:2px solid transparent;
+    border-radius:20px;
+    padding:clamp(22px,3vw,32px) 22px;
+    cursor:pointer;
+    backdrop-filter:blur(6px);
+    transition:transform .18s ease, border-color .25s ease, box-shadow .25s ease;
+    will-change:transform;
+  }
+  .card .emoji{ font-size:clamp(2.4rem,7vw,3.4rem); display:block; margin-bottom:.3em; }
+  .card h3{ font-family:'Bungee', sans-serif; font-size:1.15rem; letter-spacing:.04em; margin-bottom:.45em; }
+  .card p{ font-size:.95rem; color:rgba(255,255,255,.7); line-height:1.6; }
+  .card.r:hover{ border-color:var(--red);   box-shadow:0 0 40px rgba(237,32,36,.5); }
+  .card.g:hover{ border-color:var(--green); box-shadow:0 0 40px rgba(39,152,71,.5); }
+  .card.y:hover{ border-color:var(--gold);  box-shadow:0 0 40px rgba(254,189,17,.5); }
+  .card:hover{ animation:shake .45s ease; transform:translateY(-6px) scale(1.04); }
+  @keyframes shake{
+    0%,100%{ transform:translateY(-6px) scale(1.04) rotate(0); }
+    20%{ transform:translateY(-6px) scale(1.04) rotate(-2.5deg); }
+    40%{ transform:translateY(-6px) scale(1.04) rotate(2.5deg); }
+    60%{ transform:translateY(-6px) scale(1.04) rotate(-1.5deg); }
+    80%{ transform:translateY(-6px) scale(1.04) rotate(1.5deg); }
+  }
+
+  /* big finale line */
+  .finale{
+    font-family:'Bungee', sans-serif;
+    font-size:clamp(1.4rem,6vw,3rem);
+    margin-top:clamp(40px,6vw,64px);
+    line-height:1.25;
+  }
+  .finale .name-mini{ color:var(--gold); text-shadow:0 0 22px rgba(254,189,17,.6); }
+
+  /* ===================== FOOTER ===================== */
+  footer{
+    text-align:center;
+    padding:48px 20px 60px;
+    position:relative; z-index:10;
+  }
+  /* tiny CSS Kurdish flag */
+  .flag{
+    width:96px; height:64px; margin:0 auto 16px;
+    border-radius:6px; overflow:hidden; position:relative;
+    box-shadow:0 8px 24px rgba(0,0,0,.5);
+    background:linear-gradient(var(--red) 0 33.33%, var(--white) 33.33% 66.66%, var(--green) 66.66% 100%);
+  }
+  .flag .mini-sun{
+    position:absolute; inset:0; margin:auto;
+    width:26px; height:26px; border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 0 3px rgba(254,189,17,.35);
+  }
+  footer p{ color:rgba(255,255,255,.6); font-size:.9rem; line-height:1.7; }
+  footer .ku{ font-family:'Rakkas', serif; direction:rtl; color:var(--gold); font-size:1.3rem; }
+
+  /* ===================== RESPONSIVE & A11Y ===================== */
+  @media (max-width:560px){
+    .name{ font-size:clamp(2.2rem,15vw,3.4rem); }
+    .age-row{ flex-direction:column; gap:6px; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .wave-bg{ animation:none; }
+    .rays{ animation:spin 90s linear infinite; }
+    .halo,.name .ch,.glitch::before,.glitch::after,.scroll-hint,.card:hover{ animation:none; }
+  }
+  :focus-visible{ outline:3px solid var(--gold); outline-offset:4px; border-radius:6px; }
+</style>
+</head>
+
+<body>
+  <div class="wave-bg" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <header class="hero">
+      <div class="sun-stage" aria-label="Kurdish sun, Roj, with twenty-one rays">
+        <div class="halo" aria-hidden="true"></div>
+        <svg viewBox="0 0 400 400" role="img">
+          <defs>
+            <radialGradient id="disc" cx="50%" cy="42%" r="60%">
+              <stop offset="0%"  stop-color="#fff6d0"/>
+              <stop offset="45%" stop-color="var(--gold)"/>
+              <stop offset="100%" stop-color="#e8920a"/>
+            </radialGradient>
+            <linearGradient id="rayGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"  stop-color="#fff0b8"/>
+              <stop offset="60%" stop-color="var(--gold)"/>
+              <stop offset="100%" stop-color="#ef8f08"/>
+            </linearGradient>
+          </defs>
+          <g class="rays" id="rays"></g>
+          <circle cx="200" cy="200" r="62" fill="url(#disc)" stroke="#fff6d0" stroke-width="2"/>
+          <circle cx="200" cy="200" r="62" fill="none" stroke="rgba(237,32,36,.25)" stroke-width="6"/>
+        </svg>
+      </div>
+
+      <p class="eyebrow" id="eyebrow">ساڵڕۆژی لەدایکبوونت پیرۆز بێت</p>
+
+      <h1 class="name" id="name" aria-label="Aras Barzani"></h1>
+
+      <div class="age-row" id="ageRow">
+        <span class="age-kurdish">١٩ ساڵ</span>
+        <span class="age">19</span>
+        <span class="age-kurdish">سای</span>
+      </div>
+
+      <p class="glitch" id="glitch" data-text="Turning Nineteen">Turning Nineteen</p>
+
+      <button class="wish" id="wish" type="button">🎉 Make a Wish</button>
+      <p class="scroll-hint" id="hint">scroll for more ↓</p>
+    </header>
+
+    <div class="kilim" aria-hidden="true"></div>
+
+    <!-- ============ MESSAGE ============ -->
+    <section class="section">
+      <h2 class="section-kurdish">گەورەترین ساڵ بۆ گەورەترین هاوڕێ</h2>
+      <p class="section-en">
+        Nineteen years of being a legend, <span class="accent-y">Aras Barzani</span>.
+        Today the whole sky lights up in <span class="accent">red</span>,
+        <span class="accent-g">green</span> and <span class="accent-y">gold</span> for you.
+        Hover the cards — they bite back. 😎
+      </p>
+
+      <div class="cards">
+        <div class="card r" tabindex="0">
+          <span class="emoji">🎂</span>
+          <h3>19 Candles</h3>
+          <p>One for every year you've made the world louder and brighter.</p>
+        </div>
+        <div class="card g" tabindex="0">
+          <span class="emoji">🏔️</span>
+          <h3>Kurd & Proud</h3>
+          <p>From the mountains of Kurdistan to this very screen — pure heritage.</p>
+        </div>
+        <div class="card y" tabindex="0">
+          <span class="emoji">☀️</span>
+          <h3>Shine On</h3>
+          <p>21 rays of the Roj, all turned up to celebrate one Aras.</p>
+        </div>
+      </div>
+
+      <p class="finale">
+        Happy 19<sup>th</sup> Birthday,<br>
+        <span class="name-mini">ARAS BARZANI!</span>
+      </p>
+    </section>
+
+    <div class="kilim" aria-hidden="true"></div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+      <div class="flag" aria-label="Flag of Kurdistan"><span class="mini-sun"></span></div>
+      <p class="ku">هەر بژی کوردستان 🌞</p>
+      <p>Made with ❤️ and a lot of fireworks · 2026</p>
+    </footer>
+  </main>
+
+  <!-- ============ LIBRARIES ============ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script>
+  const COLORS = ['#ED2024', '#279847', '#FEBD11', '#FFFFFF'];
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 1) Build the 21-ray Roj ---------- */
+  (function buildSun(){
+    const g = document.getElementById('rays');
+    const cx = 200, cy = 200, inner = 66, outer = 188, RAYS = 21;
+    const half = (Math.PI / RAYS) * 0.62;          // ray base half-width
+    let d = '';
+    for (let i = 0; i < RAYS; i++){
+      const a = (i / RAYS) * Math.PI * 2 - Math.PI / 2;
+      const x1 = cx + inner * Math.cos(a - half), y1 = cy + inner * Math.sin(a - half);
+      const x2 = cx + inner * Math.cos(a + half), y2 = cy + inner * Math.sin(a + half);
+      const xt = cx + outer * Math.cos(a),        yt = cy + outer * Math.sin(a);
+      d += `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} L${xt.toFixed(1)} ${yt.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)} Z" fill="url(#rayGrad)" stroke="#ffe9a0" stroke-width="1.2"/>`;
+    }
+    g.innerHTML = d;
+  })();
+
+  /* ---------- 2) Split the name into animatable letters ---------- */
+  (function splitName(){
+    const el = document.getElementById('name');
+    const text = 'ARAS BARZANI';
+    text.split(' ').forEach((word, wi, arr) => {
+      const w = document.createElement('span');
+      w.className = 'word';
+      [...word].forEach(c => {
+        const s = document.createElement('span');
+        s.className = 'ch';
+        s.textContent = c;
+        w.appendChild(s);
+      });
+      el.appendChild(w);
+      if (wi < arr.length - 1){
+        const sp = document.createElement('span');
+        sp.className = 'space';
+        el.appendChild(sp);
+      }
+    });
+  })();
+
+  /* ---------- 3) Confetti / fireworks helpers ---------- */
+  function blast(){
+    confetti({ particleCount: 220, spread: 110, startVelocity: 55, origin:{ y:.62 }, colors: COLORS });
+    confetti({ particleCount: 120, angle: 60,  spread: 80, origin:{ x:0, y:.7 }, colors: COLORS });
+    confetti({ particleCount: 120, angle: 120, spread: 80, origin:{ x:1, y:.7 }, colors: COLORS });
+  }
+  function firework(){
+    confetti({
+      particleCount: 90, spread: 360, startVelocity: 32, ticks: 90, gravity: .9, scalar: 1.1,
+      origin:{ x: Math.random()*.8 + .1, y: Math.random()*.45 + .05 },
+      colors: COLORS
+    });
+  }
+  function sparksAt(el, colors){
+    const r = el.getBoundingClientRect();
+    confetti({
+      particleCount: 45, spread: 70, startVelocity: 30, scalar: .9, ticks: 60,
+      origin:{ x:(r.left + r.width/2)/innerWidth, y:(r.top + r.height/2)/innerHeight },
+      colors
+    });
+  }
+
+  /* ---------- 4) Orchestrated page-load reveal ---------- */
+  window.addEventListener('load', () => {
+    // big opening explosion
+    blast();
+    setTimeout(blast, 350);
+
+    if (window.gsap){
+      const tl = gsap.timeline({ defaults:{ ease:'back.out(1.7)' } });
+      tl.from('.sun-stage', { scale:.2, opacity:0, rotate:-90, duration:1, ease:'power3.out' })
+        .to('#eyebrow', { opacity:1, y:0, duration:.6, ease:'power2.out' }, '-=.4')
+        .from('.name .ch', {
+          opacity:0,
+          y:() => gsap.utils.random(-160, 160),
+          x:() => gsap.utils.random(-160, 160),
+          rotate:() => gsap.utils.random(-180, 180),
+          scale:0,
+          duration:.85,
+          stagger:{ each:.05, from:'random' }
+        }, '-=.2')
+        .to('#ageRow', { opacity:1, scale:1, duration:.6, ease:'elastic.out(1,.6)' }, '-=.3')
+        .from('#ageRow .age', { scale:0, rotate:25, duration:.7, ease:'back.out(2)' }, '<')
+        .to('#glitch', { opacity:1, duration:.4 }, '-=.2')
+        .to('#wish',   { opacity:1, y:0, duration:.5, ease:'back.out(2)' }, '-=.1')
+        .to('#hint',   { opacity:1, duration:.5 }, '-=.1');
+    } else {
+      // graceful fallback if GSAP fails to load
+      ['#eyebrow','#ageRow','#glitch','#wish','#hint'].forEach(s =>
+        document.querySelector(s).style.opacity = 1);
+    }
+
+    // ambient looping fireworks
+    if (!reduced) setInterval(firework, 2600);
+  });
+
+  /* ---------- 5) Interactions ---------- */
+  document.getElementById('wish').addEventListener('click', () => {
+    // celebratory mega-burst + screen shake
+    for (let i = 0; i < 5; i++) setTimeout(firework, i * 180);
+    blast();
+    if (window.gsap && !reduced){
+      gsap.fromTo('main', { x:-8 }, { x:0, duration:.5, ease:'elastic.out(1.2,.25)' });
+    }
+  });
+
+  // spark on hover/focus for cards
+  document.querySelectorAll('.card').forEach(card => {
+    const c = card.classList.contains('r') ? ['#ED2024','#FFFFFF']
+            : card.classList.contains('g') ? ['#279847','#FFFFFF']
+            : ['#FEBD11','#FFFFFF'];
+    card.addEventListener('mouseenter', () => sparksAt(card, c));
+    card.addEventListener('focus',      () => sparksAt(card, c));
+    card.addEventListener('click',      () => sparksAt(card, c));
+  });
+
+  // sun also throws a few sparks when tapped
+  document.querySelector('.sun-stage').addEventListener('click', function(){
+    sparksAt(this, ['#FEBD11','#ED2024','#FFFFFF']);
+  });
+  </script>
+</body>
+</html>
